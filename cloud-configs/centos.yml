@@ -1,0 +1,40 @@
+#cloud-config
+
+hostname: ${hostname}
+
+fs_setup:
+  - label: rancher-data
+    filesystem: xfs
+    device: /dev/vdb
+
+write_files:
+  - path: /opt/rancher/docker-compose.yml
+    encoding: b64
+    content: ${docker_compose_file}
+  - path: /opt/rancher/backup/docker-compose.yml
+    encoding: b64
+    content: ${backup_docker_compose_file}
+  - path: /opt/rancher/backup/config.json
+    mode: "0600"
+    encoding: b64
+    content: ${backup_config}
+  - path: /opt/rancher/backup/entrypoint.sh
+    mode: "0755"
+    encoding: b64
+    content: ${backup_entrypoint}
+
+mounts:
+  - [vdb, /opt/rancher/data, xfs, defaults, "0", "0"]
+
+packages:
+  - python3
+  - podman
+  - podman-docker
+  - ipa-client
+
+runcmd:
+  - pip3 install podman-compose
+  - ipa-client-install -U --mkhomedir --force-join -w ${ipa_otp}
+  - cd /opt/rancher
+  - mkdir -p /opt/rancher/data/ssl /opt/rancher/data/lib
+  - /usr/local/bin/podman-compose up -d

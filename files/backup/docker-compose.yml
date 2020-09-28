@@ -1,0 +1,10 @@
+version: "2"
+
+services:
+  backup:
+    image: docker.io/minio/mc
+    volumes:
+      - /opt/rancher:/opt/rancher:ro
+      - /etc/ipa/ca.crt:/root/.mc/certs/CAs/ca.crt:ro
+    entrypoint: ["/opt/rancher/backup/entrypoint.sh"]
+    working_dir: /opt/rancher/backup

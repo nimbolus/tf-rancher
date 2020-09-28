@@ -1,0 +1,11 @@
+version: "2"
+
+services:
+  server:
+    image: docker.io/rancher/rancher:${rancher_version}
+    volumes:
+      - /opt/rancher/data/ssl:/etc/rancher/ssl:z
+      - /opt/rancher/data/lib:/var/lib/rancher:z
+    ports:
+      - 80:80
+      - 443:443
