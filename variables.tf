@@ -38,16 +38,19 @@ variable "rancher_server_ipa_otp" {
   description = "freeipa otp for joining the domain"
 }
 
-variable "rancher_backup_minio_url" {
+variable "backup_minio_url" {
   default     = "https://minio.exmaple.com"
   description = "minio s3 server for storing backups"
 }
-variable "rancher_backup_minio_bucket" {
+
+variable "backup_minio_bucket" {
   default = "rancher-backups"
 }
-variable "rancher_backup_minio_access_key" {
+
+variable "backup_minio_access_key" {
   default = "rancher"
 }
-variable "rancher_backup_minio_secret_key" {
+
+variable "backup_minio_secret_key" {
   default = "verysecret"
 }
