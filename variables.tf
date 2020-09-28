@@ -17,7 +17,7 @@ variable "rancher_volume_type" {
 }
 
 variable "rancher_server_image" {
-  default = "centos-8-stream"
+  default     = "centos-8-stream"
   description = "glance image for the instance (only centos 8 is supported)"
 }
 
@@ -53,4 +53,34 @@ variable "backup_minio_access_key" {
 
 variable "backup_minio_secret_key" {
   default = "verysecret"
+}
+
+variable "auth_freeipa_enabled" {
+  default = false
+}
+
+variable "auth_freeipa_server" {
+  type    = string
+  default = "ipa.example.com"
+}
+
+variable "auth_freeipa_service_account_dn" {
+  type    = string
+  default = "krbprincipalname=rancher/rancher.example.de@EXAMPLE.COM,cn=services,cn=accounts,dc=example,dc=com"
+}
+
+variable "auth_freeipa_service_account_password" {
+  type    = string
+  default = "verysecret"
+}
+
+variable "auth_freeipa_base_dn" {
+  type    = string
+  default = "dc=example,dc=com"
+}
+
+variable "auth_freeipa_ca_certificate" {
+  type        = string
+  default     = ""
+  description = "base64 encoded freeipa ca certificate"
 }
