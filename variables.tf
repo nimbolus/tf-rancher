@@ -84,3 +84,7 @@ variable "auth_freeipa_ca_certificate" {
   default     = ""
   description = "base64 encoded freeipa ca certificate"
 }
+
+variable "cattle_security_group_cidr" {
+  default = "0.0.0.0/0"
+}

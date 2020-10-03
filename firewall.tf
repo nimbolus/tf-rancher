@@ -50,7 +50,7 @@ resource "openstack_networking_secgroup_rule_v2" "icmp_cattle" {
   direction         = "ingress"
   ethertype         = "IPv4"
   protocol          = "icmp"
-  remote_ip_prefix  = "0.0.0.0/0"
+  remote_ip_prefix  = var.cattle_security_group_cidr
   security_group_id = openstack_networking_secgroup_v2.cattle.id
 }
 
@@ -60,7 +60,7 @@ resource "openstack_networking_secgroup_rule_v2" "docker" {
   protocol          = "tcp"
   port_range_min    = 2376
   port_range_max    = 2376
-  remote_ip_prefix  = "0.0.0.0/0"
+  remote_ip_prefix  = var.cattle_security_group_cidr
   security_group_id = openstack_networking_secgroup_v2.cattle.id
 }
 
@@ -70,7 +70,7 @@ resource "openstack_networking_secgroup_rule_v2" "etcd_clients" {
   protocol          = "tcp"
   port_range_min    = 2379
   port_range_max    = 2379
-  remote_ip_prefix  = "0.0.0.0/0"
+  remote_ip_prefix  = var.cattle_security_group_cidr
   security_group_id = openstack_networking_secgroup_v2.cattle.id
 }
 
@@ -80,7 +80,7 @@ resource "openstack_networking_secgroup_rule_v2" "etcd_cluster" {
   protocol          = "tcp"
   port_range_min    = 2380
   port_range_max    = 2380
-  remote_ip_prefix  = "0.0.0.0/0"
+  remote_ip_prefix  = var.cattle_security_group_cidr
   security_group_id = openstack_networking_secgroup_v2.cattle.id
 }
 
@@ -90,7 +90,37 @@ resource "openstack_networking_secgroup_rule_v2" "kubernetes" {
   protocol          = "tcp"
   port_range_min    = 6443
   port_range_max    = 6443
-  remote_ip_prefix  = "0.0.0.0/0"
+  remote_ip_prefix  = var.cattle_security_group_cidr
+  security_group_id = openstack_networking_secgroup_v2.cattle.id
+}
+
+resource "openstack_networking_secgroup_rule_v2" "flannel_overlay_networking" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "udp"
+  port_range_min    = 8472
+  port_range_max    = 8472
+  remote_ip_prefix  = var.cattle_security_group_cidr
+  security_group_id = openstack_networking_secgroup_v2.cattle.id
+}
+
+resource "openstack_networking_secgroup_rule_v2" "flannel_liveness_probe" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 9099
+  port_range_max    = 9099
+  remote_ip_prefix  = var.cattle_security_group_cidr
+  security_group_id = openstack_networking_secgroup_v2.cattle.id
+}
+
+resource "openstack_networking_secgroup_rule_v2" "node_exporter" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 9796
+  port_range_max    = 9796
+  remote_ip_prefix  = var.cattle_security_group_cidr
   security_group_id = openstack_networking_secgroup_v2.cattle.id
 }
 
@@ -100,7 +130,7 @@ resource "openstack_networking_secgroup_rule_v2" "ssh_alt" {
   protocol          = "tcp"
   port_range_min    = 10022
   port_range_max    = 10022
-  remote_ip_prefix  = "0.0.0.0/0"
+  remote_ip_prefix  = var.cattle_security_group_cidr
   security_group_id = openstack_networking_secgroup_v2.cattle.id
 }
 
@@ -110,7 +140,17 @@ resource "openstack_networking_secgroup_rule_v2" "kubelet" {
   protocol          = "tcp"
   port_range_min    = 10250
   port_range_max    = 10250
-  remote_ip_prefix  = "0.0.0.0/0"
+  remote_ip_prefix  = var.cattle_security_group_cidr
+  security_group_id = openstack_networking_secgroup_v2.cattle.id
+}
+
+resource "openstack_networking_secgroup_rule_v2" "ingress_liveness_probe" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 10254
+  port_range_max    = 10254
+  remote_ip_prefix  = var.cattle_security_group_cidr
   security_group_id = openstack_networking_secgroup_v2.cattle.id
 }
 
@@ -120,7 +160,7 @@ resource "openstack_networking_secgroup_rule_v2" "nodeports_tcp" {
   protocol          = "tcp"
   port_range_min    = 30000
   port_range_max    = 32767
-  remote_ip_prefix  = "0.0.0.0/0"
+  remote_ip_prefix  = var.cattle_security_group_cidr
   security_group_id = openstack_networking_secgroup_v2.cattle.id
 }
 
@@ -130,6 +170,6 @@ resource "openstack_networking_secgroup_rule_v2" "nodeports_udp" {
   protocol          = "udp"
   port_range_min    = 30000
   port_range_max    = 32767
-  remote_ip_prefix  = "0.0.0.0/0"
+  remote_ip_prefix  = var.cattle_security_group_cidr
   security_group_id = openstack_networking_secgroup_v2.cattle.id
 }

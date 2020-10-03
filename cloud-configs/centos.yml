@@ -28,13 +28,13 @@ mounts:
 
 packages:
   - python3
-  - podman
-  - podman-docker
   - ipa-client
 
 runcmd:
-  - pip3 install podman-compose
   - ipa-client-install -U --mkhomedir --force-join -w ${ipa_otp}
+  - dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+  - dnf install docker-ce --nobest -y
+  - systemctl enable --now docker
+  - pip3 install docker-compose
   - cd /opt/rancher
-  - mkdir -p /opt/rancher/data/ssl /opt/rancher/data/lib
-  - /usr/local/bin/podman-compose up -d
+  - /usr/local/bin/docker-compose up -d
