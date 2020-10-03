@@ -33,7 +33,7 @@ resource "openstack_networking_secgroup_rule_v2" "ssh" {
   security_group_id = openstack_networking_secgroup_v2.rancher.id
 }
 
-resource "openstack_networking_secgroup_rule_v2" "icmp" {
+resource "openstack_networking_secgroup_rule_v2" "icmp_rancher" {
   direction         = "ingress"
   ethertype         = "IPv4"
   protocol          = "icmp"
@@ -44,6 +44,14 @@ resource "openstack_networking_secgroup_rule_v2" "icmp" {
 resource "openstack_networking_secgroup_v2" "cattle" {
   name        = "allow-cattle"
   description = "allow rancher cattle services"
+}
+
+resource "openstack_networking_secgroup_rule_v2" "icmp_cattle" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "icmp"
+  remote_ip_prefix  = "0.0.0.0/0"
+  security_group_id = openstack_networking_secgroup_v2.cattle.id
 }
 
 resource "openstack_networking_secgroup_rule_v2" "docker" {
