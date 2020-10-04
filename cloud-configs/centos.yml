@@ -29,6 +29,7 @@ mounts:
 packages:
   - python3
   - ipa-client
+  - iptables
 
 runcmd:
   - ipa-client-install -U --mkhomedir --force-join -w ${ipa_otp}
