@@ -28,14 +28,14 @@ mounts:
 
 packages:
   - python3
-  - ipa-client
+  - python3-pip
   - iptables
 
 runcmd:
-  - ipa-client-install -U --mkhomedir --force-join -w ${ipa_otp}
   - dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
   - dnf install docker-ce --nobest -y
   - systemctl enable --now docker
   - pip3 install docker-compose
   - cd /opt/rancher
   - /usr/local/bin/docker-compose up -d
+  ${post_commands}

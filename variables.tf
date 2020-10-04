@@ -33,9 +33,16 @@ variable "rancher_server_fqdn" {
   default = "rancher.example.com"
 }
 
-variable "rancher_server_ipa_otp" {
-  type        = string
-  description = "freeipa otp for joining the domain"
+variable "rancher_server_properties" {
+  type        = map(string)
+  description = "additional metadata properties for rancher server instance"
+  default = {}
+}
+
+variable "rancher_server_post_commands" {
+  type = list(string)
+  description = "commands executed at the end of cloud-init script"
+  default = []
 }
 
 variable "backup_minio_url" {

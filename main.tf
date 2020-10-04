@@ -27,6 +27,7 @@ resource "openstack_compute_instance_v2" "rancher_server" {
   image_id  = data.openstack_images_image_v2.rancher_server.id
   flavor_id = data.openstack_compute_flavor_v2.rancher_server.id
   key_pair  = openstack_compute_keypair_v2.rancher_server.name
+  metadata  = var.rancher_server_properties
 
   security_groups = [
     openstack_networking_secgroup_v2.rancher.name,
@@ -47,8 +48,8 @@ resource "openstack_compute_instance_v2" "rancher_server" {
       minio_access_key = var.backup_minio_access_key
       minio_secret_key = var.backup_minio_secret_key
     }))
-    hostname = var.rancher_server_fqdn
-    ipa_otp  = var.rancher_server_ipa_otp
+    hostname      = var.rancher_server_fqdn
+    post_commands = indent(2, yamlencode(var.rancher_server_post_commands))
   })
 
   network {
