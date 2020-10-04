@@ -26,16 +26,18 @@ write_files:
 mounts:
   - [vdb, /opt/rancher/data, xfs, defaults, "0", "0"]
 
-packages:
-  - python3
-  - python3-pip
-  - iptables
-
 runcmd:
+  # fix https://git.centos.org/centos/kickstarts/pull-request/12#
+  - sed -i '/^nameserver 192\.168\.122\.1/d' /etc/resolv.conf
+  # update system
+  - dnf update -y
+  # install docker-ce and docker-compose
   - dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
-  - dnf install docker-ce --nobest -y
+  - dnf install -y --nobest docker-ce iptables python3
   - systemctl enable --now docker
   - pip3 install docker-compose
+  # start rancher server
   - cd /opt/rancher
   - /usr/local/bin/docker-compose up -d
+  # run post commands
   ${post_commands}
