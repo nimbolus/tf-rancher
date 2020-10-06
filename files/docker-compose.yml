@@ -3,6 +3,8 @@ version: "2"
 services:
   server:
     image: docker.io/rancher/rancher:${rancher_version}
+    restart: unless-stopped
+    privileged: true
     volumes:
       - /opt/rancher/data/ssl:/etc/rancher/ssl:z
       - /opt/rancher/data/lib:/var/lib/rancher:z
