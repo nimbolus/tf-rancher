@@ -49,7 +49,7 @@ resource "openstack_compute_instance_v2" "rancher_server" {
       minio_secret_key = var.backup_minio_secret_key
     }))
     hostname      = var.rancher_server_fqdn
-    post_commands = indent(2, yamlencode(var.rancher_server_post_commands))
+    post_commands = var.rancher_server_post_commands
   })
 
   network {

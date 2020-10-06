@@ -39,5 +39,6 @@ runcmd:
   # start rancher server
   - cd /opt/rancher
   - /usr/local/bin/docker-compose up -d
-  # run post commands
-  ${post_commands}
+%{ for cmd in post_commands }
+  - ${cmd}
+%{ endfor }
