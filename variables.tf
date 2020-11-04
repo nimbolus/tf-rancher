@@ -88,7 +88,7 @@ variable "auth_freeipa_base_dn" {
 
 variable "auth_freeipa_ca_certificate" {
   type        = string
-  default     = ""
+  default     = null
   description = "base64 encoded freeipa ca certificate"
 }
 
