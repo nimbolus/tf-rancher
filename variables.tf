@@ -36,13 +36,13 @@ variable "rancher_server_fqdn" {
 variable "rancher_server_properties" {
   type        = map(string)
   description = "additional metadata properties for rancher server instance"
-  default = {}
+  default     = {}
 }
 
 variable "rancher_server_post_commands" {
-  type = list(string)
+  type        = list(string)
   description = "commands executed at the end of cloud-init script"
-  default = []
+  default     = []
 }
 
 variable "backup_minio_url" {
@@ -90,6 +90,16 @@ variable "auth_freeipa_ca_certificate" {
   type        = string
   default     = null
   description = "base64 encoded freeipa ca certificate"
+}
+
+variable "auth_freeipa_test_username" {
+  type    = string
+  default = "john.doe"
+}
+
+variable "auth_freeipa_test_password" {
+  type    = string
+  default = "secret"
 }
 
 variable "cattle_security_group_cidr" {

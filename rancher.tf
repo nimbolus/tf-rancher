@@ -34,4 +34,6 @@ resource "rancher2_auth_config_freeipa" "freeipa" {
   user_search_attribute              = "uid"
   tls                                = true
   port                               = "636"
+  test_username                      = var.auth_freeipa_test_username
+  test_password                      = var.auth_freeipa_test_password
 }
