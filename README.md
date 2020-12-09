@@ -9,8 +9,8 @@ For an overview of the options, checkout [variables.tf](./variables.tf)
 First fix selinux context on the data partition:
 
 ```sh
-semanage fcontext -a -t usr_t /opt/rancher/data
-semanage fcontext -a -t cert_t /opt/rancher/data/ssl
+chcon -R -t cert_t /opt/rancher/data/ssl
+semanage fcontext -a -t cert_t '/opt/rancher/data/ssl(/.*)?'
 ```
 
 Then create a service and request a certificate (`-g` defines the key size, default is 2048, which is a bit weak these days):
