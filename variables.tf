@@ -6,6 +6,10 @@ variable "availability_zone" {
   default = "nova"
 }
 
+variable "rancher_server_name" {
+  default = "rancher-server"
+}
+
 variable "rancher_version" {
   default     = "latest"
   description = "image tag from https://hub.docker.com/r/rancher/rancher/tags"
@@ -31,6 +35,10 @@ variable "rancher_server_ip_v4" {
 
 variable "rancher_server_fqdn" {
   default = "rancher.example.com"
+}
+
+variable "rancher_server_key_pair" {
+  default = null
 }
 
 variable "rancher_server_properties" {

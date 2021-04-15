@@ -11,22 +11,18 @@ data "openstack_networking_network_v2" "network" {
   name = var.network_name
 }
 
-resource "openstack_compute_keypair_v2" "rancher_server" {
-  name = "rancher-server"
-}
-
 resource "openstack_blockstorage_volume_v3" "rancher_data" {
-  name              = "rancher-server-data"
+  name              = "${var.rancher_server_name}-data"
   availability_zone = var.availability_zone
   size              = 10
   volume_type       = var.rancher_volume_type
 }
 
 resource "openstack_compute_instance_v2" "rancher_server" {
-  name      = "rancher-server"
+  name      = var.rancher_server_name
   image_id  = data.openstack_images_image_v2.rancher_server.id
   flavor_id = data.openstack_compute_flavor_v2.rancher_server.id
-  key_pair  = openstack_compute_keypair_v2.rancher_server.name
+  key_pair  = var.rancher_server_key_pair
   metadata  = var.rancher_server_properties
 
   security_groups = [
