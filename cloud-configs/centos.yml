@@ -11,18 +11,6 @@ write_files:
   - path: /opt/rancher/docker-compose.yml
     encoding: b64
     content: ${docker_compose_file}
-  - path: /opt/rancher/backup/docker-compose.yml
-    encoding: b64
-    content: ${backup_docker_compose_file}
-  - path: /opt/rancher/backup/config.json
-    mode: "0600"
-    encoding: b64
-    content: ${backup_config}
-  - path: /opt/rancher/backup/entrypoint.sh
-    mode: "0755"
-    encoding: b64
-    content: ${backup_entrypoint}
-
 mounts:
   - [vdb, /opt/rancher/data, xfs, defaults, "0", "0"]
 

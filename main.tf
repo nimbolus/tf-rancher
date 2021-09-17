@@ -35,15 +35,6 @@ resource "openstack_compute_instance_v2" "rancher_server" {
     docker_compose_file = base64encode(templatefile("${path.module}/files/docker-compose.yml", {
       rancher_version = var.rancher_version
     }))
-    backup_docker_compose_file = filebase64("${path.module}/files/backup/docker-compose.yml")
-    backup_entrypoint = base64encode(templatefile("${path.module}/files/backup/entrypoint.sh", {
-      minio_bucket = var.backup_minio_bucket
-    }))
-    backup_config = base64encode(templatefile("${path.module}/files/backup/config.json", {
-      minio_url        = var.backup_minio_url
-      minio_access_key = var.backup_minio_access_key
-      minio_secret_key = var.backup_minio_secret_key
-    }))
     hostname      = var.rancher_server_fqdn
     post_commands = var.rancher_server_post_commands
   })

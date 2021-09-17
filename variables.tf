@@ -53,23 +53,6 @@ variable "rancher_server_post_commands" {
   default     = []
 }
 
-variable "backup_minio_url" {
-  default     = "https://minio.exmaple.com"
-  description = "minio s3 server for storing backups"
-}
-
-variable "backup_minio_bucket" {
-  default = "rancher-backups"
-}
-
-variable "backup_minio_access_key" {
-  default = "rancher"
-}
-
-variable "backup_minio_secret_key" {
-  default = "verysecret"
-}
-
 variable "auth_freeipa_enabled" {
   default = false
 }
