@@ -7,10 +7,6 @@ data "openstack_compute_flavor_v2" "rancher_server" {
   name = var.rancher_server_flavor
 }
 
-data "openstack_networking_network_v2" "network" {
-  name = var.network_name
-}
-
 resource "openstack_blockstorage_volume_v3" "rancher_data" {
   name              = "${var.rancher_server_name}-data"
   availability_zone = var.availability_zone
@@ -41,7 +37,7 @@ resource "openstack_compute_instance_v2" "rancher_server" {
   })
 
   network {
-    name        = data.openstack_networking_network_v2.network.name
+    name        = var.network_id
     fixed_ip_v4 = var.rancher_server_ip_v4
   }
 }
