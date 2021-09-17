@@ -59,46 +59,6 @@ variable "rancher_server_post_commands" {
   default     = []
 }
 
-variable "auth_freeipa_enabled" {
-  default = false
-}
-
-variable "auth_freeipa_server" {
-  type    = string
-  default = "ipa.example.com"
-}
-
-variable "auth_freeipa_service_account_dn" {
-  type    = string
-  default = "krbprincipalname=rancher/rancher.example.de@EXAMPLE.COM,cn=services,cn=accounts,dc=example,dc=com"
-}
-
-variable "auth_freeipa_service_account_password" {
-  type    = string
-  default = "verysecret"
-}
-
-variable "auth_freeipa_base_dn" {
-  type    = string
-  default = "dc=example,dc=com"
-}
-
-variable "auth_freeipa_ca_certificate" {
-  type        = string
-  default     = null
-  description = "base64 encoded freeipa ca certificate"
-}
-
-variable "auth_freeipa_test_username" {
-  type    = string
-  default = "john.doe"
-}
-
-variable "auth_freeipa_test_password" {
-  type    = string
-  default = "secret"
-}
-
 variable "cattle_security_group_cidr" {
   default = "0.0.0.0/0"
 }

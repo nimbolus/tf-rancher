@@ -1,11 +1,5 @@
-output "rancher_token" {
-  value     = rancher2_bootstrap.admin.token
-  sensitive = true
-}
-
-output "rancher_admin_password" {
-  value     = random_password.rancher_admin_password.result
-  sensitive = true
+output "rancher_server_instance_id" {
+  value = openstack_compute_instance_v2.rancher_server.id
 }
 
 output "rancher_server_port_id" {
