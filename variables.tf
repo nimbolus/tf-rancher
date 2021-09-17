@@ -17,11 +17,11 @@ variable "rancher_image" {
 
 variable "rancher_version" {
   default     = "latest"
-  description = "image tag (e.g. https://hub.docker.com/r/rancher/rancher/tags)"
+  description = "image tag (e.g. one of https://hub.docker.com/r/rancher/rancher/tags)"
 }
 
 variable "rancher_volume_type" {
-  default     = "ssd"
+  default     = "__DEFAULT__"
   description = "cinder volume type for persistent data"
 }
 
