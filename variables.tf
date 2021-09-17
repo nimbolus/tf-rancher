@@ -10,9 +10,14 @@ variable "rancher_server_name" {
   default = "rancher-server"
 }
 
+variable "rancher_image" {
+  default     = "docker.io/rancher/rancher"
+  description = "container image repository and name"
+}
+
 variable "rancher_version" {
   default     = "latest"
-  description = "image tag from https://hub.docker.com/r/rancher/rancher/tags"
+  description = "image tag (e.g. https://hub.docker.com/r/rancher/rancher/tags)"
 }
 
 variable "rancher_volume_type" {
@@ -30,7 +35,8 @@ variable "rancher_server_flavor" {
 }
 
 variable "rancher_server_ip_v4" {
-  default = null
+  default     = null
+  description = "IPv4 address for network port"
 }
 
 variable "rancher_server_fqdn" {

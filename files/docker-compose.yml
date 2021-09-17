@@ -2,7 +2,7 @@ version: "2"
 
 services:
   server:
-    image: docker.io/rancher/rancher:${rancher_version}
+    image: ${rancher_image}:${rancher_version}
     restart: unless-stopped
     privileged: true
     volumes:

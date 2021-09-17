@@ -33,6 +33,7 @@ resource "openstack_compute_instance_v2" "rancher_server" {
   config_drive      = true
   user_data = templatefile("${path.module}/cloud-configs/centos.yml", {
     docker_compose_file = base64encode(templatefile("${path.module}/files/docker-compose.yml", {
+      rancher_image = var.rancher_image
       rancher_version = var.rancher_version
     }))
     hostname      = var.rancher_server_fqdn
