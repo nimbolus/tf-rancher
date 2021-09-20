@@ -1,64 +1,78 @@
-variable "network_id" {
-  type = string
+variable "rancher_name" {
+  default = "rancher"
 }
 
-variable "availability_zone" {
-  default = "nova"
-}
-
-variable "rancher_server_name" {
-  default = "rancher-server"
-}
-
-variable "rancher_image" {
-  default     = "docker.io/rancher/rancher"
-  description = "container image repository and name"
-}
-
-variable "rancher_version" {
-  default     = "latest"
-  description = "image tag (e.g. one of https://hub.docker.com/r/rancher/rancher/tags)"
-}
-
-variable "rancher_volume_type" {
-  default     = "__DEFAULT__"
-  description = "cinder volume type for persistent data"
-}
-
-variable "rancher_server_image" {
-  default     = "centos-8-stream"
-  description = "glance image for the instance (only centos 8 is supported)"
-}
-
-variable "rancher_server_flavor" {
-  default = "m1.medium"
-}
-
-variable "rancher_server_ip_v4" {
-  default     = null
-  description = "IPv4 address for network port"
-}
-
-variable "rancher_server_fqdn" {
+variable "rancher_hostname" {
   default = "rancher.example.com"
 }
 
-variable "rancher_server_key_pair" {
+variable "rancher_image_repo" {
+  default = "docker.io/rancher/rancher"
+}
+
+variable "rancher_image_tag" {
+  default = "v2.6.0"
+}
+
+variable "rancher_chart_version" {
+  default = "2.6.0"
+}
+
+variable "cluster_availability_zone" {
+  default = "nova"
+}
+
+variable "cluster_size" {
+  default = 1
+}
+
+variable "cluster_image_name" {
+  default = "ubuntu-20.04"
+}
+
+variable "cluster_flavor_name" {
+  default = "m1.medium"
+}
+
+variable "cluster_volume_type" {
+  default = "__DEFAULT__"
+}
+
+variable "cluster_volume_size" {
+  default = 10
+}
+
+variable "cluster_key_pair" {
+  type = string
+}
+
+variable "cluster_server_group_policy" {
+  default = "soft-anti-affinity"
+}
+
+variable "cluster_floating_ip_pool" {
   default = null
 }
 
-variable "rancher_server_properties" {
-  type        = map(string)
-  description = "additional metadata properties for rancher server instance"
-  default     = {}
+variable "cluster_server1_floating_ip" {
+  default = false
+}
+variable "cluster_servers_floating_ip" {
+  default = false
 }
 
-variable "rancher_server_post_commands" {
-  type        = list(string)
-  description = "commands executed at the end of cloud-init script"
-  default     = []
+variable "cluster_network_id" {
+  type = string
 }
 
-variable "cattle_security_group_cidr" {
-  default = "0.0.0.0/0"
+variable "cluster_subnet_id" {
+  type = string
+}
+
+variable "cert_manager_cluster_issuer_name" {
+  default = "letsencrypt"
+}
+
+variable "cert_manager_cluster_issuer_yaml" {
+  default = null
 }

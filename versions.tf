@@ -1,11 +1,21 @@
 terraform {
+  required_version = ">= 0.14.0"
   required_providers {
     openstack = {
-      source = "terraform-provider-openstack/openstack"
+      source  = "terraform-provider-openstack/openstack"
+      version = "~> 1.43.0"
     }
-    rancher2 = {
-      source = "rancher/rancher2"
+    helm = {
+      source  = "hashicorp/helm"
+      version = ">= 2.1.2"
+    }
+    k8sbootstrap = {
+      source  = "nimbolus/k8sbootstrap"
+      version = ">= 0.1.1"
+    }
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = ">= 1.11.1"
     }
   }
-  required_version = ">= 0.13"
 }
