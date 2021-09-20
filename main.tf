@@ -1,5 +1,5 @@
 module "cluster" {
-  source = "../cluster"
+  source = "git::https://github.com/nimbolus/tf-k3s-cluster"
 
   cluster_name                        = var.rancher_name
   cluster_availability_zone           = var.cluster_availability_zone
