@@ -135,6 +135,9 @@ resource "helm_release" "rancher" {
     hostname: ${var.rancher_hostname}
     replicas: ${var.cluster_size}
     ingress:
+      extraAnnotations:
+        # fix error code 413 with large helm deployments
+        "nginx.ingress.kubernetes.io/proxy-body-size": "512m"
       tls:
         source: ${local.ingress_tls_source}
     addLocal: "auto"
