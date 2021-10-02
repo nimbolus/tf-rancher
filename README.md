@@ -28,11 +28,4 @@ output "rancher_cluster_kubeconfig" {
   value     = module.rancher.kubeconfig
   sensitive = true
 }
-
-module "rancher_sa_test" {
-  source = "git::https://github.com/nimbolus/tf-rancher.git//service-account?ref=rancher-v2.6"
-
-  name             = "test"
-  email            = "test@example.com"
-}
 ```
