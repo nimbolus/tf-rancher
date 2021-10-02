@@ -16,4 +16,5 @@ module "cluster" {
   cluster_servers_floating_ip         = var.cluster_servers_floating_ip
   cluster_network_id                  = var.cluster_network_id
   cluster_subnet_id                   = var.cluster_subnet_id
+  cluster_instance_properties         = var.cluster_instance_properties
 }

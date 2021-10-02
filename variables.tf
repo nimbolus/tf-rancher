@@ -69,6 +69,10 @@ variable "cluster_subnet_id" {
   type = string
 }
 
+variable "cluster_instance_properties" {
+  default = {}
+}
+
 variable "cert_manager_cluster_issuer_name" {
   default = "letsencrypt"
 }
