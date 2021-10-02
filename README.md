@@ -28,4 +28,31 @@ output "rancher_cluster_kubeconfig" {
   value     = module.rancher.kubeconfig
   sensitive = true
 }
+
+provider "rancher2" {
+  alias = "bootstrap"
+
+  api_url   = "https://rancher.example.com"
+  bootstrap = true
+}
+
+resource "rancher2_bootstrap" "admin" {
+  provider = rancher2.bootstrap
+
+  current_password = module.rancher.rancher_bootstrap_password
+  password         = module.rancher.rancher_bootstrap_password
+  telemetry        = false
+}
+
+provider "rancher2" {
+  api_url   = rancher2_bootstrap.admin.url
+  token_key = rancher2_bootstrap.admin.token
+}
+
+module "rancher_sa_test" {
+  source = "git::https://github.com/nimbolus/tf-rancher.git//service-account?ref=rancher-v2.6"
+
+  name  = "test"
+  email = "test@example.com"
+}
 ```
