@@ -22,3 +22,7 @@ output "ca_crt" {
 output "rancher_bootstrap_password" {
   value = random_password.rancher_bootstrap_password.result
 }
+
+output "cattle_resources_system_namespace" {
+  value = kubernetes_namespace.cattle_resources_system.metadata.0.name
+}

@@ -18,6 +18,18 @@ variable "rancher_chart_version" {
   default = "2.6.0"
 }
 
+variable "rancher_backup_enabled" {
+  default = false
+}
+
+variable "rancher_backup_chart_version" {
+  default = "2.0.0"
+}
+
+variable "rancher_backup_chart_values" {
+  default = []
+}
+
 variable "cluster_availability_zone" {
   default = "nova"
 }
