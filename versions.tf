@@ -3,7 +3,7 @@ terraform {
   required_providers {
     openstack = {
       source  = "terraform-provider-openstack/openstack"
-      version = "~> 1.43.0"
+      version = ">= 1.43.0"
     }
     helm = {
       source  = "hashicorp/helm"
