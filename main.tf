@@ -1,49 +1,20 @@
-data "openstack_images_image_v2" "rancher_server" {
-  name        = var.rancher_server_image
-  most_recent = true
-}
+module "cluster" {
+  source = "git::https://github.com/nimbolus/tf-k3s-cluster?ref=v0.1.0"
 
-data "openstack_compute_flavor_v2" "rancher_server" {
-  name = var.rancher_server_flavor
-}
-
-resource "openstack_blockstorage_volume_v3" "rancher_data" {
-  name              = "${var.rancher_server_name}-data"
-  availability_zone = var.availability_zone
-  size              = 10
-  volume_type       = var.rancher_volume_type
-}
-
-resource "openstack_compute_instance_v2" "rancher_server" {
-  name      = var.rancher_server_name
-  image_id  = data.openstack_images_image_v2.rancher_server.id
-  flavor_id = data.openstack_compute_flavor_v2.rancher_server.id
-  key_pair  = var.rancher_server_key_pair
-  metadata  = var.rancher_server_properties
-
-  security_groups = [
-    openstack_networking_secgroup_v2.rancher.name,
-  ]
-
-  availability_zone = var.availability_zone
-  config_drive      = true
-  user_data = templatefile("${path.module}/cloud-configs/centos.yml", {
-    docker_compose_file = base64encode(templatefile("${path.module}/files/docker-compose.yml", {
-      rancher_image   = var.rancher_image
-      rancher_version = var.rancher_version
-    }))
-    hostname      = var.rancher_server_fqdn
-    post_commands = var.rancher_server_post_commands
-  })
-
-  network {
-    uuid        = var.network_id
-    fixed_ip_v4 = var.rancher_server_ip_v4
-  }
-}
-
-resource "openstack_compute_volume_attach_v2" "rancher_data" {
-  instance_id = openstack_compute_instance_v2.rancher_server.id
-  volume_id   = openstack_blockstorage_volume_v3.rancher_data.id
-  device      = "/dev/vdb"
+  cluster_name                        = var.rancher_name
+  cluster_availability_zone           = var.cluster_availability_zone
+  cluster_size                        = var.cluster_size
+  cluster_servers                     = var.cluster_size
+  cluster_image_name                  = var.cluster_image_name
+  cluster_flavor_name                 = var.cluster_flavor_name
+  cluster_volume_type                 = var.cluster_volume_type
+  cluster_volume_size                 = var.cluster_volume_size
+  cluster_key_pair                    = var.cluster_key_pair
+  cluster_servers_server_group_policy = var.cluster_server_group_policy
+  cluster_floating_ip_pool            = var.cluster_floating_ip_pool
+  cluster_server1_floating_ip         = var.cluster_server1_floating_ip
+  cluster_servers_floating_ip         = var.cluster_servers_floating_ip
+  cluster_network_id                  = var.cluster_network_id
+  cluster_subnet_id                   = var.cluster_subnet_id
+  cluster_instance_properties         = var.cluster_instance_properties
 }

@@ -1,17 +1,28 @@
-output "rancher_token" {
-  value     = rancher2_bootstrap.admin.token
+output "secgroup_id" {
+  value = module.cluster.secgroup_id
+}
+
+output "kubeconfig" {
+  value     = data.k8sbootstrap_auth.auth.kubeconfig
   sensitive = true
 }
 
-output "rancher_admin_password" {
-  value     = random_password.rancher_admin_password.result
-  sensitive = true
+output "k3s_url" {
+  value = module.cluster.k3s_url
 }
 
-output "rancher_server_port_id" {
-  value = openstack_compute_instance_v2.rancher_server.network.0.port
+output "cluster_token" {
+  value = module.cluster.cluster_token
 }
 
-output "rancher_server_ip" {
-  value = openstack_compute_instance_v2.rancher_server.network.0.fixed_ip_v4
+output "ca_crt" {
+  value = data.k8sbootstrap_auth.auth.ca_crt
+}
+
+output "rancher_bootstrap_password" {
+  value = random_password.rancher_bootstrap_password.result
+}
+
+output "cattle_resources_system_namespace" {
+  value = kubernetes_namespace.cattle_resources_system.metadata.0.name
 }

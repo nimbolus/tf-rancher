@@ -1,39 +1,156 @@
-resource "random_password" "rancher_admin_password" {
-  length           = 32
-  special          = true
-  override_special = "_$%&?!@+#"
+resource "random_password" "rancher_bootstrap_password" {
+  length  = 32
+  special = true
 }
 
-provider "rancher2" {
-  alias     = "bootstrap"
-  api_url   = "https://${var.rancher_server_fqdn}"
-  bootstrap = true
+resource "kubernetes_namespace" "ingress_nginx" {
+  provider = kubernetes.rancher_cluster
+
+  metadata {
+    name = "ingress-nginx"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      metadata.0.annotations,
+      metadata.0.labels,
+    ]
+  }
 }
 
-resource "rancher2_bootstrap" "admin" {
-  provider  = rancher2.bootstrap
-  password  = random_password.rancher_admin_password.result
-  telemetry = false
+resource "kubernetes_namespace" "cert_manager" {
+  provider = kubernetes.rancher_cluster
+
+  metadata {
+    name = "cert-manager"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      metadata.0.annotations,
+      metadata.0.labels,
+    ]
+  }
 }
 
-provider "rancher2" {
-  alias     = "auth"
-  api_url   = "https://${var.rancher_server_fqdn}"
-  token_key = rancher2_bootstrap.admin.token
+resource "kubernetes_namespace" "cattle_system" {
+  provider = kubernetes.rancher_cluster
+
+  metadata {
+    name = "cattle-system"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      metadata.0.annotations,
+      metadata.0.labels,
+    ]
+  }
 }
 
-resource "rancher2_auth_config_freeipa" "freeipa" {
-  provider                           = rancher2.auth
-  count                              = var.auth_freeipa_enabled ? 1 : 0
-  servers                            = [var.auth_freeipa_server]
-  service_account_distinguished_name = var.auth_freeipa_service_account_dn
-  service_account_password           = var.auth_freeipa_service_account_password
-  user_search_base                   = "cn=users,cn=accounts,${var.auth_freeipa_base_dn}"
-  group_search_base                  = "cn=groups,cn=accounts,${var.auth_freeipa_base_dn}"
-  certificate                        = var.auth_freeipa_ca_certificate
-  user_search_attribute              = "uid"
-  tls                                = true
-  port                               = "636"
-  test_username                      = var.auth_freeipa_test_username
-  test_password                      = var.auth_freeipa_test_password
+resource "helm_release" "ingress_nginx" {
+  provider = helm.rancher_cluster
+
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  chart      = "ingress-nginx"
+  name       = "ingress-nginx"
+  namespace  = kubernetes_namespace.ingress_nginx.metadata.0.name
+  version    = "4.0.1"
+  values = [<<-EOT
+    controller:
+      replicaCount: 2
+      watchIngressWithoutClass: true
+    EOT
+  ]
+}
+
+resource "helm_release" "cert_manager" {
+  provider = helm.rancher_cluster
+
+  repository = "https://charts.jetstack.io"
+  chart      = "cert-manager"
+  name       = "cert-manager"
+  namespace  = kubernetes_namespace.cert_manager.metadata.0.name
+  version    = "v1.5.3"
+  values = [<<-EOT
+    installCRDs: true
+    extraArgs:
+      - --dns01-recursive-nameservers-only
+      - --dns01-recursive-nameservers=9.9.9.9:53,8.8.8.8:53
+    EOT
+  ]
+}
+
+locals {
+  ingress_tls_source = var.cert_manager_cluster_issuer_yaml != null ? "secret" : "rancher"
+}
+
+resource "kubectl_manifest" "cluster_issuer" {
+  provider = kubectl.rancher_cluster
+  count    = local.ingress_tls_source == "secret" ? 1 : 0
+
+  yaml_body = var.cert_manager_cluster_issuer_yaml
+
+  depends_on = [
+    helm_release.cert_manager,
+  ]
+}
+
+resource "kubectl_manifest" "rancher_certificate" {
+  provider = kubectl.rancher_cluster
+  count    = local.ingress_tls_source == "secret" ? 1 : 0
+
+  yaml_body = <<-EOT
+    apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: rancher
+      namespace: ${kubernetes_namespace.cattle_system.metadata.0.name}
+    spec:
+      secretName: tls-rancher-ingress
+      issuerRef:
+        name: ${var.cert_manager_cluster_issuer_name}
+        kind: ClusterIssuer
+      dnsNames:
+        - "${var.rancher_hostname}"
+    EOT
+
+  depends_on = [
+    kubectl_manifest.cluster_issuer,
+  ]
+}
+
+resource "helm_release" "rancher" {
+  provider = helm.rancher_cluster
+
+  repository = "https://releases.rancher.com/server-charts/latest"
+  chart      = "rancher"
+  name       = "rancher"
+  namespace  = kubernetes_namespace.cattle_system.metadata.0.name
+  version    = var.rancher_chart_version
+
+  values = [<<-EOT
+    rancherImage: ${var.rancher_image_repo}
+    rancherImageTag: ${var.rancher_image_tag}
+    hostname: ${var.rancher_hostname}
+    replicas: ${var.cluster_size}
+    ingress:
+      extraAnnotations:
+        # fix error code 413 with large helm deployments
+        "nginx.ingress.kubernetes.io/proxy-body-size": "512m"
+      tls:
+        source: ${local.ingress_tls_source}
+    addLocal: "auto"
+    EOT
+  ]
+
+  set_sensitive {
+    name = "bootstrapPassword"
+    value = random_password.rancher_bootstrap_password.result
+  }
+
+  depends_on = [
+    kubectl_manifest.rancher_certificate,
+    helm_release.ingress_nginx,
+  ]
 }
