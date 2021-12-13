@@ -12,7 +12,7 @@ resource "openstack_compute_keypair_v2" "rancher_cluster" {
 }
 
 module "rancher" {
-  source = "git::https://github.com/nimbolus/tf-rancher.git?ref=rancher-v2.6"
+  source = "git::https://github.com/nimbolus/tf-rancher.git?ref=v0.2.0"
 
   cluster_availability_zone   = "nova"
   cluster_image_name          = "ubuntu-20.04"
@@ -50,7 +50,7 @@ provider "rancher2" {
 }
 
 module "rancher_sa_test" {
-  source = "git::https://github.com/nimbolus/tf-rancher.git//service-account?ref=rancher-v2.6"
+  source = "git::https://github.com/nimbolus/tf-rancher.git//service-account?ref=v0.2.0"
 
   name  = "test"
   email = "test@example.com"

@@ -18,6 +18,10 @@ variable "rancher_chart_version" {
   default = "2.6.0"
 }
 
+variable "rancher_ip_whitelist" {
+  default = "0.0.0.0/0"
+}
+
 variable "rancher_backup_enabled" {
   default = false
 }

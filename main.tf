@@ -18,3 +18,23 @@ module "cluster" {
   cluster_subnet_id                   = var.cluster_subnet_id
   cluster_instance_properties         = var.cluster_instance_properties
 }
+
+resource "openstack_networking_secgroup_rule_v2" "http" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 80
+  port_range_max    = 80
+  remote_ip_prefix  = var.rancher_ip_whitelist
+  security_group_id = module.cluster.secgroup_id
+}
+
+resource "openstack_networking_secgroup_rule_v2" "https" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 443
+  port_range_max    = 443
+  remote_ip_prefix  = var.rancher_ip_whitelist
+  security_group_id = module.cluster.secgroup_id
+}

@@ -55,7 +55,7 @@ resource "helm_release" "ingress_nginx" {
   chart      = "ingress-nginx"
   name       = "ingress-nginx"
   namespace  = kubernetes_namespace.ingress_nginx.metadata.0.name
-  version    = "4.0.1"
+  version    = "4.0.13"
   values = [<<-EOT
     controller:
       replicaCount: 2
@@ -71,7 +71,7 @@ resource "helm_release" "cert_manager" {
   chart      = "cert-manager"
   name       = "cert-manager"
   namespace  = kubernetes_namespace.cert_manager.metadata.0.name
-  version    = "v1.5.3"
+  version    = "v1.6.1"
   values = [<<-EOT
     installCRDs: true
     extraArgs:
