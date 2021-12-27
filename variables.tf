@@ -90,6 +90,10 @@ variable "cluster_instance_properties" {
   default = {}
 }
 
+variable "cluster_k3s_version" {
+  default = null
+}
+
 variable "cert_manager_cluster_issuer_name" {
   default = "letsencrypt"
 }
