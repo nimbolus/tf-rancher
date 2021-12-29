@@ -1,5 +1,5 @@
 module "cluster" {
-  source = "git::https://github.com/nimbolus/tf-k3s-cluster?ref=v0.1.1"
+  source = "git::https://github.com/nimbolus/tf-k3s-cluster?ref=v0.1.2"
 
   cluster_name                        = var.rancher_name
   cluster_availability_zone           = var.cluster_availability_zone
@@ -17,6 +17,7 @@ module "cluster" {
   cluster_network_id                  = var.cluster_network_id
   cluster_subnet_id                   = var.cluster_subnet_id
   cluster_instance_properties         = var.cluster_instance_properties
+  cluster_k3s_version                 = var.cluster_k3s_version
 }
 
 resource "openstack_networking_secgroup_rule_v2" "http" {

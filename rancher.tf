@@ -120,6 +120,10 @@ resource "kubectl_manifest" "rancher_certificate" {
   ]
 }
 
+locals {
+  rancher_replicas = var.rancher_replicas == null ? var.cluster_size : var.rancher_replicas
+}
+
 resource "helm_release" "rancher" {
   provider = helm.rancher_cluster
 
@@ -133,7 +137,7 @@ resource "helm_release" "rancher" {
     rancherImage: ${var.rancher_image_repo}
     rancherImageTag: ${var.rancher_image_tag}
     hostname: ${var.rancher_hostname}
-    replicas: ${var.cluster_size}
+    replicas: ${local.rancher_replicas}
     ingress:
       extraAnnotations:
         # fix error code 413 with large helm deployments
@@ -145,7 +149,7 @@ resource "helm_release" "rancher" {
   ]
 
   set_sensitive {
-    name = "bootstrapPassword"
+    name  = "bootstrapPassword"
     value = random_password.rancher_bootstrap_password.result
   }
 

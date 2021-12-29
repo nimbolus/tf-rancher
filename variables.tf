@@ -18,6 +18,11 @@ variable "rancher_chart_version" {
   default = "2.6.0"
 }
 
+variable "rancher_replicas" {
+  default     = null
+  description = "defaults to cluster_size"
+}
+
 variable "rancher_ip_whitelist" {
   default = "0.0.0.0/0"
 }
@@ -88,6 +93,10 @@ variable "cluster_subnet_id" {
 
 variable "cluster_instance_properties" {
   default = {}
+}
+
+variable "cluster_k3s_version" {
+  default = null
 }
 
 variable "cert_manager_cluster_issuer_name" {
