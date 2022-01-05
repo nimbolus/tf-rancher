@@ -26,3 +26,11 @@ output "rancher_bootstrap_password" {
 output "cattle_resources_system_namespace" {
   value = kubernetes_namespace.cattle_resources_system.metadata.0.name
 }
+
+output "servers_node_ips" {
+  value = module.cluster.servers_node_ips
+}
+
+output "servers_node_external_ips" {
+  value = module.cluster.servers_node_external_ips
+}
