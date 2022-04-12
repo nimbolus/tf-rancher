@@ -51,11 +51,15 @@ variable "cluster_image_name" {
   default = "ubuntu-20.04"
 }
 
+variable "cluster_image_id" {
+  default = null
+}
+
 variable "cluster_image_scsi_bus" {
   default = false
 }
 
-variable "cluster_flavor_name" {
+variable "cluster_server_flavor_name" {
   default = "m1.medium"
 }
 
@@ -63,7 +67,7 @@ variable "cluster_volume_type" {
   default = "__DEFAULT__"
 }
 
-variable "cluster_volume_size" {
+variable "cluster_server_volume_size" {
   default = 10
 }
 
@@ -101,6 +105,10 @@ variable "cluster_instance_properties" {
 
 variable "cluster_k3s_version" {
   default = null
+}
+
+variable "cluster_k3s_channel" {
+  default = "stable"
 }
 
 variable "cert_manager_cluster_issuer_name" {

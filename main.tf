@@ -1,15 +1,16 @@
 module "cluster" {
-  source = "git::https://github.com/nimbolus/tf-k3s-cluster?ref=v0.1.4"
+  source = "git::https://github.com/nimbolus/tf-k3s-cluster?ref=v0.2.0"
 
   cluster_name                        = var.rancher_name
   cluster_availability_zone           = var.cluster_availability_zone
   cluster_size                        = var.cluster_size
   cluster_servers                     = var.cluster_size
   cluster_image_name                  = var.cluster_image_name
+  cluster_image_id                    = var.cluster_image_id
   cluster_image_scsi_bus              = var.cluster_image_scsi_bus
-  cluster_flavor_name                 = var.cluster_flavor_name
+  cluster_server_flavor_name          = var.cluster_server_flavor_name
   cluster_volume_type                 = var.cluster_volume_type
-  cluster_volume_size                 = var.cluster_volume_size
+  cluster_server_volume_size          = var.cluster_server_volume_size
   cluster_key_pair                    = var.cluster_key_pair
   cluster_servers_server_group_policy = var.cluster_server_group_policy
   cluster_floating_ip_pool            = var.cluster_floating_ip_pool
@@ -19,6 +20,7 @@ module "cluster" {
   cluster_subnet_id                   = var.cluster_subnet_id
   cluster_instance_properties         = var.cluster_instance_properties
   cluster_k3s_version                 = var.cluster_k3s_version
+  cluster_k3s_channel                 = var.cluster_k3s_channel
 }
 
 resource "openstack_networking_secgroup_rule_v2" "http" {
