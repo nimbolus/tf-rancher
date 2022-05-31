@@ -111,7 +111,7 @@ variable "cluster_k3s_version" {
 }
 
 variable "cluster_k3s_channel" {
-  default = "stable"
+  default = "v1.21"
 }
 
 variable "cert_manager_cluster_issuer_name" {
