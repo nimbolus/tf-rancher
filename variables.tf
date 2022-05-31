@@ -11,10 +11,12 @@ variable "rancher_image_repo" {
 }
 
 variable "rancher_image_tag" {
-  default = "v2.6.0"
+  default = null
+  type    = string
 }
 
 variable "rancher_chart_version" {
+  # registryUrl=https://releases.rancher.com/server-charts/stable depName=rancher
   default = "2.6.0"
 }
 
@@ -32,6 +34,7 @@ variable "rancher_backup_enabled" {
 }
 
 variable "rancher_backup_chart_version" {
+  # registryUrl=https://releases.rancher.com/server-charts/stable depName=rancher-backup
   default = "2.0.0"
 }
 

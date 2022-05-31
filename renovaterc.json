@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "regexManagers": [
+      {
+          "fileMatch": [
+              ".*\\.tf$"
+          ],
+          "matchStrings": [
+              "registryUrl=(?<registryUrl>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.* = +\"(?<currentValue>.*)\""
+          ],
+          "datasourceTemplate": "helm"
+      }
+  ]
+}

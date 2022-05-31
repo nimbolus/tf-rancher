@@ -135,7 +135,9 @@ resource "helm_release" "rancher" {
 
   values = [<<-EOT
     rancherImage: ${var.rancher_image_repo}
+    %{ if var.rancher_image_tag != null ~}
     rancherImageTag: ${var.rancher_image_tag}
+    %{ endif ~}
     hostname: ${var.rancher_hostname}
     replicas: ${local.rancher_replicas}
     ingress:
