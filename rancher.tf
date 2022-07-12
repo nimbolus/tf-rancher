@@ -135,9 +135,9 @@ resource "helm_release" "rancher" {
 
   values = [<<-EOT
     rancherImage: ${var.rancher_image_repo}
-    %{ if var.rancher_image_tag != null ~}
+    %{ if var.rancher_image_tag != null }
     rancherImageTag: ${var.rancher_image_tag}
-    %{ endif ~}
+    %{ endif }
     hostname: ${var.rancher_hostname}
     replicas: ${local.rancher_replicas}
     ingress:
@@ -146,7 +146,6 @@ resource "helm_release" "rancher" {
         "nginx.ingress.kubernetes.io/proxy-body-size": "512m"
       tls:
         source: ${local.ingress_tls_source}
-    addLocal: "auto"
     EOT
   ]
 
