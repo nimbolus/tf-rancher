@@ -3,7 +3,7 @@ output "secgroup_id" {
 }
 
 output "kubeconfig" {
-  value     = data.k8sbootstrap_auth.auth.kubeconfig
+  value     = module.cluster.kubeconfig
   sensitive = true
 }
 
@@ -16,7 +16,7 @@ output "cluster_token" {
 }
 
 output "ca_crt" {
-  value = data.k8sbootstrap_auth.auth.ca_crt
+  value = module.cluster.cluster_ca_certificate
 }
 
 output "rancher_bootstrap_password" {
