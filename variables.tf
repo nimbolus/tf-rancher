@@ -62,15 +62,15 @@ variable "cluster_image_scsi_bus" {
   default = false
 }
 
-variable "cluster_server_flavor_name" {
+variable "cluster_flavor_name" {
   default = "m1.medium"
 }
 
-variable "cluster_volume_type" {
+variable "cluster_data_volume_type" {
   default = "__DEFAULT__"
 }
 
-variable "cluster_server_volume_size" {
+variable "cluster_data_volume_size" {
   default = 10
 }
 
