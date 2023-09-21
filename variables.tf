@@ -35,7 +35,7 @@ variable "rancher_backup_enabled" {
 
 variable "rancher_backup_chart_version" {
   # registryUrl=https://charts.rancher.io depName=rancher-backup
-  default = "102.0.1+up3.1.1"
+  default = "102.0.2+up3.1.2"
 }
 
 variable "rancher_backup_chart_values" {
