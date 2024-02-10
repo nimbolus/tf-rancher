@@ -55,7 +55,7 @@ resource "helm_release" "ingress_nginx" {
   chart      = "ingress-nginx"
   name       = "ingress-nginx"
   namespace  = kubernetes_namespace.ingress_nginx.metadata.0.name
-  version    = "4.8.3"
+  version    = "4.9.1"
   values = [<<-EOT
     controller:
       replicaCount: 2
