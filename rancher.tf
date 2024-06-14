@@ -85,38 +85,40 @@ locals {
   ingress_tls_source = var.cert_manager_cluster_issuer_yaml != null ? "secret" : "rancher"
 }
 
-resource "kubectl_manifest" "cluster_issuer" {
-  provider = kubectl.rancher_cluster
+resource "kubernetes_manifest" "cluster_issuer" {
+  provider = kubernetes.rancher_cluster
   count    = local.ingress_tls_source == "secret" ? 1 : 0
 
-  yaml_body = var.cert_manager_cluster_issuer_yaml
+  manifest = yamldecode(var.cert_manager_cluster_issuer_yaml)
 
   depends_on = [
     helm_release.cert_manager,
   ]
 }
 
-resource "kubectl_manifest" "rancher_certificate" {
-  provider = kubectl.rancher_cluster
+resource "kubernetes_manifest" "rancher_certificate" {
+  provider = kubernetes.rancher_cluster
   count    = local.ingress_tls_source == "secret" ? 1 : 0
 
-  yaml_body = <<-EOT
-    apiVersion: cert-manager.io/v1
-    kind: Certificate
-    metadata:
-      name: rancher
-      namespace: ${kubernetes_namespace.cattle_system.metadata.0.name}
-    spec:
-      secretName: tls-rancher-ingress
-      issuerRef:
-        name: ${var.cert_manager_cluster_issuer_name}
-        kind: ClusterIssuer
-      dnsNames:
-        - "${var.rancher_hostname}"
-    EOT
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "Certificate"
+    metadata = {
+      name      = "rancher"
+      namespace = kubernetes_namespace.cattle_system.metadata.0.name
+    }
+    spec = {
+      secretName = "tls-rancher-ingress"
+      issuerRef = {
+        name = var.cert_manager_cluster_issuer_name
+        kind = "ClusterIssuer"
+      }
+      dnsNames = ["${var.rancher_hostname}"]
+    }
+  }
 
   depends_on = [
-    kubectl_manifest.cluster_issuer,
+    kubernetes_manifest.cluster_issuer,
   ]
 }
 
@@ -135,9 +137,9 @@ resource "helm_release" "rancher" {
 
   values = [<<-EOT
     rancherImage: ${var.rancher_image_repo}
-    %{ if var.rancher_image_tag != null }
+    %{if var.rancher_image_tag != null}
     rancherImageTag: ${var.rancher_image_tag}
-    %{ endif }
+    %{endif}
     hostname: ${var.rancher_hostname}
     replicas: ${local.rancher_replicas}
     ingress:
@@ -155,7 +157,7 @@ resource "helm_release" "rancher" {
   }
 
   depends_on = [
-    kubectl_manifest.rancher_certificate,
+    kubernetes_manifest.rancher_certificate,
     helm_release.ingress_nginx,
   ]
 }
