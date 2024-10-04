@@ -17,7 +17,7 @@ variable "rancher_image_tag" {
 
 variable "rancher_chart_version" {
   # registryUrl=https://releases.rancher.com/server-charts/stable depName=rancher
-  default = "2.8.5"
+  default = "2.9.2"
 }
 
 variable "rancher_replicas" {
