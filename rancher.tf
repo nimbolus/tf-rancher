@@ -71,7 +71,7 @@ resource "helm_release" "cert_manager" {
   chart      = "cert-manager"
   name       = "cert-manager"
   namespace  = kubernetes_namespace.cert_manager.metadata.0.name
-  version    = "v1.15.3"
+  version    = "v1.16.0"
   values = [<<-EOT
     installCRDs: true
     extraArgs:
